@@ -1,4 +1,34 @@
 # code.py (V4.3.4 - Preview spacing synchronization fix)
+import sys
+import os
+
+# --- Helper function to find resource files ---
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+# Ensure the license_manager can be found
+try:
+    if getattr(sys, 'frozen', False):
+        # If the application is run as a bundle, the PyInstaller bootloader
+        # extends the sys module by a flag frozen=True and sets the app 
+        # path into variable _MEIPASS'.
+        application_path = sys._MEIPASS
+        sys.path.append(application_path)
+    else:
+        application_path = os.path.dirname(os.path.abspath(__file__))
+except Exception:
+    application_path = os.path.abspath(".")
+
+sys.path.insert(0, application_path)
+
+
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -40,7 +70,7 @@ from license_manager import (
 
 # Configure logging (不变)
 logging.basicConfig(
-    filename="email_sending.log",
+    filename=os.path.join(application_path, "email_sending.log"),
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
@@ -482,7 +512,7 @@ class EmailSenderApp:
         self.font_size_var = tk.StringVar(value="14"); self.font_var = tk.StringVar(value="Arial")
         self.current_success_sends_count = 0; self.signature_image_path = None; self.signature_image_cid = "GlobalSignatureCID01"; self.signature_filename_var = tk.StringVar()
         self.fonts = ["Arial", "Helvetica", "Times New Roman", "Courier New", "Verdana", "宋体", "黑体", "楷体", "微软雅黑", "仿宋"]
-        self.config_file = "config.json"; self.sending_thread = None; self.pause_event = threading.Event(); self.pause_event.set(); self.pause_resume_button = None
+        self.config_file = os.path.join(application_path, "config.json"); self.sending_thread = None; self.pause_event = threading.Event(); self.pause_event.set(); self.pause_resume_button = None
         
         # 添加帮助网址
         self.help_url = "https://help.getzentools.com/"
@@ -1528,7 +1558,7 @@ class EmailSenderApp:
             self.current_excel_row = 0
             summary_msg = self.lang["completed"].format(count=len(contacts_df_to_send) - start_row, cc_email=cc_email)
             try:
-                with open("email_summary.txt", "w", encoding="utf-8") as f: 
+                with open(os.path.join(application_path, "email_summary.txt"), "w", encoding="utf-8") as f: 
                     f.write(f"{summary_msg}\n{self.lang['used_excel'].format(excel_file=self.excel_file_var.get())}\n{self.lang['details_log']}\n")
             except Exception as e: 
                 logging.error(f"Failed to write summary: {e}")
