@@ -550,8 +550,8 @@ def check_trial_status():
             # 计算剩余天数和小时数
             remaining_days = remaining.days
             remaining_hours = remaining.seconds // 3600
-            # 创建用户友好的消息
-            friendly_message = f"试用剩余: {remaining_days} 天 {remaining_hours} 小时 (至 {local_expiry_time.strftime('%Y-%m-%d %H:%M:%S')})"
+            # 创建用户友好的消息（改为英文）
+            friendly_message = f"Trial remaining: {remaining_days} days {remaining_hours} hours (until {local_expiry_time.strftime('%Y-%m-%d %H:%M:%S')})"
             print(f"[TRIAL_CHECK] Trial is valid. {remaining_days} days {remaining_hours} hours remaining")
             return True, friendly_message
             
