@@ -481,10 +481,10 @@ class EmailSenderApp:
         self.sender_var = tk.StringVar(); self.password_var = tk.StringVar(); self.smtp_host_var = tk.StringVar(); self.smtp_port_var = tk.StringVar()
         self.subject_var = tk.StringVar(); self.cc_email_var = tk.StringVar()
         # 将单一的delay_var替换为min_delay_var和max_delay_var
-        self.min_delay_var = tk.StringVar(value="1")  
-        self.max_delay_var = tk.StringVar(value="5")
+        self.min_delay_var = tk.StringVar(value="5")  
+        self.max_delay_var = tk.StringVar(value="10")
         self.batch_size_var = tk.StringVar(value="100")
-        self.batch_interval_var = tk.StringVar(value="10"); self.excel_file_var = tk.StringVar(); self.attachment_paths = []; self.attachment_var = tk.StringVar()
+        self.batch_interval_var = tk.StringVar(value="20"); self.excel_file_var = tk.StringVar(); self.attachment_paths = []; self.attachment_var = tk.StringVar()
         self.font_size_var = tk.StringVar(value="14"); self.font_var = tk.StringVar(value="Arial")
         self.current_success_sends_count = 0; self.signature_image_path = None; self.signature_image_cid = "GlobalSignatureCID01"; self.signature_filename_var = tk.StringVar()
         self.fonts = ["Arial", "Helvetica", "Times New Roman", "Courier New", "Verdana", "宋体", "黑体", "楷体", "微软雅黑", "仿宋"]
@@ -936,7 +936,7 @@ class EmailSenderApp:
         
         # 创建其他UI元素
         main_paned_window = ttk.PanedWindow(self.root, orient=tk.VERTICAL); main_paned_window.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
-        top_frame_container = ttk.Frame(main_paned_window); main_paned_window.add(top_frame_container, weight=4); top_frame_container.columnconfigure(0, weight=1); top_frame_container.columnconfigure(1, weight=0); top_frame_container.columnconfigure(2, weight=1); top_frame_container.rowconfigure(0, weight=1)
+        top_frame_container = ttk.Frame(main_paned_window); main_paned_window.add(top_frame_container, weight=0); top_frame_container.columnconfigure(0, weight=1); top_frame_container.columnconfigure(1, weight=0); top_frame_container.columnconfigure(2, weight=1); top_frame_container.rowconfigure(0, weight=1)
         self.input_frame = ttk.LabelFrame(top_frame_container, text=self.lang["input_label"], padding="4 6"); self.input_frame.grid(row=0, column=0, padx=(0,3), pady=3, sticky="nsew"); self.input_frame.columnconfigure(1, weight=1)
         ttk.Label(self.input_frame, text=self.lang["sender_label"]).grid(row=0, column=0, padx=2, pady=0, sticky="w"); ttk.Entry(self.input_frame, textvariable=self.sender_var, width=30).grid(row=0, column=1, padx=2, pady=0, sticky="ew")
         ttk.Label(self.input_frame, text=self.lang["password_label"]).grid(row=1, column=0, padx=2, pady=0, sticky="w"); ttk.Entry(self.input_frame, textvariable=self.password_var, show="*", width=30).grid(row=1, column=1, padx=2, pady=0, sticky="ew")
@@ -995,7 +995,7 @@ class EmailSenderApp:
         self.preview_body_label_widget = ttk.Label(self.preview_frame, text=self.lang["preview_body_label"]) # Store for easy update
         self.preview_body_label_widget.grid(row=3, column=0, sticky="w", pady=(5,2));
         self.preview_body_text = tk.Text(self.preview_frame, height=8, width=40, state="disabled", wrap=tk.WORD, bg="#e9e9e9"); self.preview_body_text.grid(row=4, column=0, sticky="nsew")
-        bottom_frame_container = ttk.Frame(main_paned_window, height=200); main_paned_window.add(bottom_frame_container, weight=1); bottom_frame_container.columnconfigure(0, weight=1); bottom_frame_container.rowconfigure(0, weight=0); bottom_frame_container.rowconfigure(1, weight=1)
+        bottom_frame_container = ttk.Frame(main_paned_window); main_paned_window.add(bottom_frame_container, weight=1); bottom_frame_container.columnconfigure(0, weight=1); bottom_frame_container.rowconfigure(0, weight=0); bottom_frame_container.rowconfigure(1, weight=1)
         button_controls_frame = ttk.Frame(bottom_frame_container); button_controls_frame.grid(row=0, column=0, pady=(5,3), sticky="ew")
         center_buttons_frame = ttk.Frame(button_controls_frame); center_buttons_frame.pack(side=tk.LEFT, padx=(15,0)); 
         self.start_button = ttk.Button(center_buttons_frame, text=self.lang["start_button"], command=self.start_sending); 
