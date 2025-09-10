@@ -888,6 +888,16 @@ class EmailSenderApp:
                 background=[("active", "#e0e8e0"), ("disabled", disabled_bg)],
                 foreground=[("disabled", "#a0a0a0")])
         
+        # Help按钮蓝色样式
+        style.configure("Help.TButton", 
+                      font=("Helvetica", 10), 
+                      background=text_color_light,  # 使用浅色背景
+                      foreground="#2196F3",  # 蓝色文字
+                      padding=5)
+        style.map("Help.TButton",
+                background=[("active", "#e3f2fd"), ("disabled", disabled_bg)],  # 浅蓝色悬停
+                foreground=[("disabled", "#a0a0a0")])
+        
         # 标签样式
         style.configure("TLabel", 
                       font=("Helvetica", 10), 
@@ -926,60 +936,68 @@ class EmailSenderApp:
         
         # 创建其他UI元素
         main_paned_window = ttk.PanedWindow(self.root, orient=tk.VERTICAL); main_paned_window.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
-        top_frame_container = ttk.Frame(main_paned_window); main_paned_window.add(top_frame_container, weight=1); top_frame_container.columnconfigure(0, weight=1); top_frame_container.columnconfigure(1, weight=1); top_frame_container.rowconfigure(0, weight=1)
-        self.input_frame = ttk.LabelFrame(top_frame_container, text=self.lang["input_label"], padding="10 20"); self.input_frame.grid(row=0, column=0, padx=(0,5), pady=5, sticky="nsew"); self.input_frame.columnconfigure(1, weight=1)
-        ttk.Label(self.input_frame, text=self.lang["sender_label"]).grid(row=0, column=0, padx=5, pady=2, sticky="w"); ttk.Entry(self.input_frame, textvariable=self.sender_var, width=35).grid(row=0, column=1, padx=5, pady=2, sticky="ew")
-        ttk.Label(self.input_frame, text=self.lang["password_label"]).grid(row=1, column=0, padx=5, pady=2, sticky="w"); ttk.Entry(self.input_frame, textvariable=self.password_var, show="*", width=35).grid(row=1, column=1, padx=5, pady=2, sticky="ew")
-        ttk.Label(self.input_frame, text=self.lang["smtp_host_label"]).grid(row=2, column=0, padx=5, pady=2, sticky="w"); ttk.Entry(self.input_frame, textvariable=self.smtp_host_var, width=35).grid(row=2, column=1, padx=5, pady=2, sticky="ew")
-        ttk.Label(self.input_frame, text=self.lang["smtp_port_label"]).grid(row=3, column=0, padx=5, pady=2, sticky="w"); ttk.Entry(self.input_frame, textvariable=self.smtp_port_var, width=35).grid(row=3, column=1, padx=5, pady=2, sticky="ew")
-        ttk.Label(self.input_frame, text=self.lang["subject_label"]).grid(row=4, column=0, padx=5, pady=2, sticky="w"); self.subject_entry = ttk.Entry(self.input_frame, textvariable=self.subject_var, width=35); self.subject_entry.grid(row=4, column=1, padx=5, pady=2, sticky="ew")
-        ttk.Label(self.input_frame, text=self.lang["cc_email_label"]).grid(row=5, column=0, padx=5, pady=2, sticky="w"); ttk.Entry(self.input_frame, textvariable=self.cc_email_var, width=35).grid(row=5, column=1, padx=5, pady=2, sticky="ew")
+        top_frame_container = ttk.Frame(main_paned_window); main_paned_window.add(top_frame_container, weight=1); top_frame_container.columnconfigure(0, weight=1); top_frame_container.columnconfigure(1, weight=0); top_frame_container.columnconfigure(2, weight=1); top_frame_container.rowconfigure(0, weight=1)
+        self.input_frame = ttk.LabelFrame(top_frame_container, text=self.lang["input_label"], padding="4 6"); self.input_frame.grid(row=0, column=0, padx=(0,3), pady=3, sticky="nsew"); self.input_frame.columnconfigure(1, weight=1)
+        ttk.Label(self.input_frame, text=self.lang["sender_label"]).grid(row=0, column=0, padx=2, pady=0, sticky="w"); ttk.Entry(self.input_frame, textvariable=self.sender_var, width=30).grid(row=0, column=1, padx=2, pady=0, sticky="ew")
+        ttk.Label(self.input_frame, text=self.lang["password_label"]).grid(row=1, column=0, padx=2, pady=0, sticky="w"); ttk.Entry(self.input_frame, textvariable=self.password_var, show="*", width=30).grid(row=1, column=1, padx=2, pady=0, sticky="ew")
+        ttk.Label(self.input_frame, text=self.lang["smtp_host_label"]).grid(row=2, column=0, padx=2, pady=0, sticky="w"); ttk.Entry(self.input_frame, textvariable=self.smtp_host_var, width=30).grid(row=2, column=1, padx=2, pady=0, sticky="ew")
+        ttk.Label(self.input_frame, text=self.lang["smtp_port_label"]).grid(row=3, column=0, padx=2, pady=0, sticky="w"); ttk.Entry(self.input_frame, textvariable=self.smtp_port_var, width=30).grid(row=3, column=1, padx=2, pady=0, sticky="ew")
+        ttk.Label(self.input_frame, text=self.lang["subject_label"]).grid(row=4, column=0, padx=2, pady=0, sticky="w"); self.subject_entry = ttk.Entry(self.input_frame, textvariable=self.subject_var, width=30); self.subject_entry.grid(row=4, column=1, padx=2, pady=0, sticky="ew")
+        ttk.Label(self.input_frame, text=self.lang["cc_email_label"]).grid(row=5, column=0, padx=2, pady=0, sticky="w"); ttk.Entry(self.input_frame, textvariable=self.cc_email_var, width=30).grid(row=5, column=1, padx=2, pady=0, sticky="ew")
         
         # 创建用于显示两个延迟输入框的Frame
         delay_frame = ttk.Frame(self.input_frame)
-        delay_frame.grid(row=6, column=1, padx=5, pady=2, sticky="ew")
+        delay_frame.grid(row=6, column=1, padx=2, pady=0, sticky="ew")
         delay_frame.columnconfigure(0, weight=1)  # 最小延迟输入框
         delay_frame.columnconfigure(2, weight=1)  # 最大延迟输入框
         
         # 添加最小延迟标签和输入框
-        ttk.Label(self.input_frame, text=self.lang["min_delay_label"]).grid(row=6, column=0, padx=5, pady=2, sticky="w")
-        ttk.Entry(delay_frame, textvariable=self.min_delay_var, width=15).grid(row=0, column=0, sticky="w")
+        ttk.Label(self.input_frame, text=self.lang["min_delay_label"]).grid(row=6, column=0, padx=2, pady=0, sticky="w")
+        ttk.Entry(delay_frame, textvariable=self.min_delay_var, width=12).grid(row=0, column=0, sticky="w")
         
         # 添加最大延迟标签和输入框
-        ttk.Label(delay_frame, text=self.lang["max_delay_label"]).grid(row=0, column=1, padx=(20, 5), pady=2, sticky="w")
-        ttk.Entry(delay_frame, textvariable=self.max_delay_var, width=15).grid(row=0, column=2, sticky="w")
+        ttk.Label(delay_frame, text=self.lang["max_delay_label"]).grid(row=0, column=1, padx=(10, 2), sticky="w")
+        ttk.Entry(delay_frame, textvariable=self.max_delay_var, width=12).grid(row=0, column=2, sticky="w")
         
-        ttk.Label(self.input_frame, text=self.lang["batch_size_label"]).grid(row=7, column=0, padx=5, pady=2, sticky="w"); ttk.Entry(self.input_frame, textvariable=self.batch_size_var, width=35).grid(row=7, column=1, padx=5, pady=2, sticky="ew")
-        ttk.Label(self.input_frame, text=self.lang["batch_interval_label"]).grid(row=8, column=0, padx=5, pady=2, sticky="w"); ttk.Entry(self.input_frame, textvariable=self.batch_interval_var, width=35).grid(row=8, column=1, padx=5, pady=2, sticky="ew")
-        ttk.Label(self.input_frame, text=self.lang["excel_label"]).grid(row=9, column=0, padx=5, pady=2, sticky="w"); excel_frame = ttk.Frame(self.input_frame); excel_frame.grid(row=9, column=1, padx=5, pady=2, sticky="ew"); excel_frame.columnconfigure(0, weight=1); excel_entry = ttk.Entry(excel_frame, textvariable=self.excel_file_var); excel_entry.grid(row=0, column=0, sticky="ew"); ttk.Button(excel_frame, text=self.lang["select_excel"], command=self.select_excel_file, style="Secondary.TButton").grid(row=0, column=1, padx=(5,0))
-        ttk.Label(self.input_frame, text=self.lang["language_label"]).grid(row=10, column=0, padx=5, pady=2, sticky="w"); language_combo = ttk.Combobox(self.input_frame, textvariable=self.language_var, values=list(LANGUAGES.keys()), state="readonly", width=10); language_combo.grid(row=10, column=1, padx=5, pady=2, sticky="w"); language_combo.bind("<<ComboboxSelected>>", self.change_language)
+        ttk.Label(self.input_frame, text=self.lang["batch_size_label"]).grid(row=7, column=0, padx=2, pady=0, sticky="w"); ttk.Entry(self.input_frame, textvariable=self.batch_size_var, width=30).grid(row=7, column=1, padx=2, pady=0, sticky="ew")
+        ttk.Label(self.input_frame, text=self.lang["batch_interval_label"]).grid(row=8, column=0, padx=2, pady=0, sticky="w"); ttk.Entry(self.input_frame, textvariable=self.batch_interval_var, width=30).grid(row=8, column=1, padx=2, pady=0, sticky="ew")
+        ttk.Label(self.input_frame, text=self.lang["excel_label"]).grid(row=9, column=0, padx=2, pady=0, sticky="w"); excel_frame = ttk.Frame(self.input_frame); excel_frame.grid(row=9, column=1, padx=2, pady=0, sticky="ew"); excel_frame.columnconfigure(0, weight=1); excel_entry = ttk.Entry(excel_frame, textvariable=self.excel_file_var); excel_entry.grid(row=0, column=0, sticky="ew"); ttk.Button(excel_frame, text=self.lang["select_excel"], command=self.select_excel_file, style="Secondary.TButton").grid(row=0, column=1, padx=(2,0))
+        ttk.Label(self.input_frame, text=self.lang["language_label"]).grid(row=10, column=0, padx=2, pady=0, sticky="w"); language_combo = ttk.Combobox(self.input_frame, textvariable=self.language_var, values=list(LANGUAGES.keys()), state="readonly", width=8); language_combo.grid(row=10, column=1, padx=2, pady=0, sticky="w"); language_combo.bind("<<ComboboxSelected>>", self.change_language)
         
-        # 创建按钮框架，用于并排放置帮助按钮和保存设置按钮
-        buttons_frame = ttk.Frame(self.input_frame)
-        buttons_frame.grid(row=11, column=1, padx=5, pady=5, sticky="e")
+        # 创建中间按钮区域，放在Input Settings和Email Body之间
+        middle_buttons_frame = ttk.Frame(top_frame_container)
+        middle_buttons_frame.grid(row=0, column=1, padx=2, pady=3, sticky="ns")
         
-        # 添加帮助按钮
-        ttk.Button(buttons_frame, text=self.lang["help_button"], command=self.open_help_website, style="Secondary.TButton").pack(side="left", padx=(0,5))
+        # 添加帮助按钮，使用蓝色样式
+        help_button = ttk.Button(middle_buttons_frame, text=self.lang["help_button"], command=self.open_help_website, style="Help.TButton", width=6)
+        help_button.pack(pady=(20, 2))
         
-        # 添加保存设置按钮
-        ttk.Button(buttons_frame, text=self.lang["save_settings"], command=self.save_config, style="Secondary.TButton").pack(side="left")
+        # 添加一个占位空间，将Save按钮推到底部
+        spacer = ttk.Frame(middle_buttons_frame)
+        spacer.pack(expand=True, fill="y")
         
-        body_frame = ttk.LabelFrame(top_frame_container, text=self.lang["body_label"], padding="10"); body_frame.grid(row=0, column=1, padx=(5,0), pady=5, sticky="nsew"); body_frame.columnconfigure(0, weight=1); body_frame.rowconfigure(1, weight=1)
+        # 保存设置按钮放在最下方，根据语言显示相应文本
+        save_text = "Save" if self.lang_code == "en" else "保存"
+        self.save_button = ttk.Button(middle_buttons_frame, text=save_text, command=self.save_config, style="Secondary.TButton", width=6)
+        self.save_button.pack(pady=(0, 20), side="bottom")
+        
+        body_frame = ttk.LabelFrame(top_frame_container, text=self.lang["body_label"], padding="8 10"); body_frame.grid(row=0, column=2, padx=(3,0), pady=3, sticky="nsew"); body_frame.columnconfigure(0, weight=1); body_frame.rowconfigure(1, weight=1)
         toolbar_frame = ttk.Frame(body_frame); toolbar_frame.grid(row=0, column=0, columnspan=2, sticky="ew", pady=(0,5))
         ttk.Button(toolbar_frame, text=self.lang["bold"], command=self.toggle_bold, style="Secondary.TButton").pack(side="left", padx=2); ttk.Button(toolbar_frame, text=self.lang["italic"], command=self.toggle_italic, style="Secondary.TButton").pack(side="left", padx=2); ttk.Label(toolbar_frame, text=self.lang["font_size"]).pack(side="left", padx=(10,2)); ttk.Entry(toolbar_frame, textvariable=self.font_size_var, width=4).pack(side="left", padx=2); ttk.Label(toolbar_frame, text=self.lang["font_label"]).pack(side="left", padx=(10,2)); font_combo = ttk.Combobox(toolbar_frame, textvariable=self.font_var, values=self.fonts, state="readonly", width=12); font_combo.pack(side="left", padx=2); font_combo.bind("<<ComboboxSelected>>", self.apply_font_and_size_change); ttk.Button(toolbar_frame, text=self.lang["apply_font_button"], command=self.apply_font_and_size_change, style="Secondary.TButton").pack(side="left", padx=2); ttk.Button(toolbar_frame, text=self.lang["color_label"], command=self.choose_color, style="Secondary.TButton").pack(side="left", padx=2); ttk.Button(toolbar_frame, text=self.lang["bg_color_label"], command=self.choose_bg_color, style="Secondary.TButton").pack(side="left", padx=2)
         self.body_text_area = tk.Text(body_frame, height=10, width=40, font=(self.font_var.get(), int(self.font_size_var.get() or 14)), undo=True, wrap=tk.WORD); self.body_text_area.grid(row=1, column=0, sticky="nsew", padx=(0,0), pady=(0,0)); self.body_text_area.bind("<<Paste>>", self.handle_paste); v_scrollbar = ttk.Scrollbar(body_frame, orient=tk.VERTICAL, command=self.body_text_area.yview); v_scrollbar.grid(row=1, column=1, sticky="ns"); self.body_text_area.config(yscrollcommand=v_scrollbar.set)
-        middle_frame_container = ttk.Frame(main_paned_window); main_paned_window.add(middle_frame_container, weight=4); middle_frame_container.columnconfigure(0, weight=1); middle_frame_container.columnconfigure(1, weight=1); middle_frame_container.rowconfigure(0, weight=1)
-        self.placeholder_mapping_frame = ttk.LabelFrame(middle_frame_container, text=self.lang["personalization_engine_label"], padding="10"); self.placeholder_mapping_frame.grid(row=0, column=0, padx=(0,5), pady=5, sticky="nsew"); self.placeholder_mapping_frame.columnconfigure(0, weight=1); self.placeholder_mapping_frame.rowconfigure(1, weight=1)
+        
+        middle_frame_container = ttk.Frame(main_paned_window); main_paned_window.add(middle_frame_container, weight=2); middle_frame_container.columnconfigure(0, weight=1); middle_frame_container.columnconfigure(1, weight=1); middle_frame_container.rowconfigure(0, weight=1)
+        self.placeholder_mapping_frame = ttk.LabelFrame(middle_frame_container, text=self.lang["personalization_engine_label"], padding="8"); self.placeholder_mapping_frame.grid(row=0, column=0, padx=(0,3), pady=3, sticky="nsew"); self.placeholder_mapping_frame.columnconfigure(0, weight=1); self.placeholder_mapping_frame.rowconfigure(1, weight=1)
         scan_button = ttk.Button(self.placeholder_mapping_frame, text=self.lang["scan_placeholders_button"], command=self.scan_and_setup_placeholder_ui, style="Secondary.TButton"); scan_button.grid(row=0, column=0, pady=(0,5), sticky="ew"); self.placeholder_scan_instruction_label = ttk.Label(self.placeholder_mapping_frame, text=self.lang["placeholder_scan_instruction"], wraplength=300, justify=tk.LEFT); self.placeholder_scan_instruction_label.grid(row=2, column=0, pady=(5,0), sticky="ew"); self.placeholder_scrollable_frame = ScrollableFrame(self.placeholder_mapping_frame); self.placeholder_scrollable_frame.grid(row=1, column=0, sticky="nsew", pady=5)
-        self.preview_frame = ttk.LabelFrame(middle_frame_container, text=self.lang["preview_engine_label"], padding="10"); self.preview_frame.grid(row=0, column=1, padx=(5,0), pady=5, sticky="nsew"); self.preview_frame.columnconfigure(0, weight=1); self.preview_frame.rowconfigure(1, weight=0); self.preview_frame.rowconfigure(2, weight=0); self.preview_frame.rowconfigure(3, weight=0); self.preview_frame.rowconfigure(4, weight=3)
+        self.preview_frame = ttk.LabelFrame(middle_frame_container, text=self.lang["preview_engine_label"], padding="8"); self.preview_frame.grid(row=0, column=1, padx=(3,0), pady=3, sticky="nsew"); self.preview_frame.columnconfigure(0, weight=1); self.preview_frame.rowconfigure(1, weight=0); self.preview_frame.rowconfigure(2, weight=0); self.preview_frame.rowconfigure(3, weight=0); self.preview_frame.rowconfigure(4, weight=3)
         preview_controls_frame = ttk.Frame(self.preview_frame); preview_controls_frame.grid(row=0, column=0, sticky="ew", pady=(0,5)); preview_controls_frame.columnconfigure(1, weight=1); ttk.Label(preview_controls_frame, text=self.lang["select_excel_row_for_preview"]).grid(row=0, column=0, padx=(0,5), sticky="w"); self.preview_row_var = tk.StringVar(); self.preview_row_combobox = ttk.Combobox(preview_controls_frame, textvariable=self.preview_row_var, state="readonly", width=10); self.preview_row_combobox.grid(row=0, column=1, sticky="ew"); self.preview_row_combobox.bind("<<ComboboxSelected>>", self.update_preview); ttk.Button(preview_controls_frame, text=self.lang["refresh_preview_button"], command=self.update_preview, style="Secondary.TButton").grid(row=0, column=2, padx=(5,0), sticky="e")
         ttk.Label(self.preview_frame, text=self.lang["preview_subject_label"]).grid(row=1, column=0, sticky="w", pady=(5,2)); self.preview_subject_text = tk.Text(self.preview_frame, height=2, width=40, state="disabled", wrap=tk.WORD, bg="#e9e9e9"); self.preview_subject_text.grid(row=2, column=0, sticky="nsew", pady=(0,5));
         self.preview_body_label_widget = ttk.Label(self.preview_frame, text=self.lang["preview_body_label"]) # Store for easy update
         self.preview_body_label_widget.grid(row=3, column=0, sticky="w", pady=(5,2));
         self.preview_body_text = tk.Text(self.preview_frame, height=8, width=40, state="disabled", wrap=tk.WORD, bg="#e9e9e9"); self.preview_body_text.grid(row=4, column=0, sticky="nsew")
         bottom_frame_container = ttk.Frame(main_paned_window, height=200); main_paned_window.add(bottom_frame_container, weight=1); bottom_frame_container.columnconfigure(0, weight=1); bottom_frame_container.rowconfigure(0, weight=0); bottom_frame_container.rowconfigure(1, weight=1)
-        button_controls_frame = ttk.Frame(bottom_frame_container); button_controls_frame.grid(row=0, column=0, pady=(10,5), sticky="ew")
-        center_buttons_frame = ttk.Frame(button_controls_frame); center_buttons_frame.pack(side=tk.LEFT, padx=(20,0)); 
+        button_controls_frame = ttk.Frame(bottom_frame_container); button_controls_frame.grid(row=0, column=0, pady=(5,3), sticky="ew")
+        center_buttons_frame = ttk.Frame(button_controls_frame); center_buttons_frame.pack(side=tk.LEFT, padx=(15,0)); 
         self.start_button = ttk.Button(center_buttons_frame, text=self.lang["start_button"], command=self.start_sending); 
         self.start_button.pack(side="left", padx=(0, 5)); 
         self.pause_resume_button = ttk.Button(center_buttons_frame, text=self.lang["pause_button"], command=self.toggle_pause_resume, state=tk.DISABLED, style="Secondary.TButton"); 
@@ -994,8 +1012,8 @@ class EmailSenderApp:
         self.activate_button = ttk.Button(center_buttons_frame, text=self.lang["permanent_activate_button"], command=self.open_activation_dialog, style="Activate.TButton")
         self.activate_button.pack(side="left", padx=(0, 20))
         
-        right_controls_frame = ttk.Frame(button_controls_frame); right_controls_frame.pack(side=tk.RIGHT, padx=(0,20)); attach_label = ttk.Label(right_controls_frame, text=self.lang["attach_label"]); attach_label.pack(side="left", padx=(0,2)); self.attachment_entry = ttk.Entry(right_controls_frame, textvariable=self.attachment_var, width=25, state="readonly"); self.attachment_entry.pack(side="left", padx=(0,5)); ttk.Button(right_controls_frame, text=self.lang["select_attach"], command=self.select_attachments, style="Secondary.TButton").pack(side="left", padx=(0,2)); ttk.Button(right_controls_frame, text=self.lang["clear_attachments"], command=self.clear_attachments, style="Secondary.TButton").pack(side="left", padx=(0,10)); ttk.Button(right_controls_frame, text=self.lang["signature_button"], command=self.select_signature_image, style="Secondary.TButton").pack(side="left", padx=(5, 2)); ttk.Button(right_controls_frame, text=self.lang["clear_signature_button"], command=self.clear_signature_image, style="Secondary.TButton").pack(side="left", padx=(0,2)); self.signature_label_display = ttk.Label(right_controls_frame, textvariable=self.signature_filename_var, width=15, anchor="w"); self.signature_label_display.pack(side="left", padx=(0,5))
-        status_frame = ttk.LabelFrame(bottom_frame_container, text=self.lang["status_label"], padding="10"); status_frame.grid(row=1, column=0, padx=0, pady=(5,0), sticky="nsew"); status_frame.columnconfigure(0, weight=1); status_frame.rowconfigure(0, weight=1); self.status_text = tk.Text(status_frame, height=6, width=70, state="normal", bg="#e8f4f8", wrap=tk.WORD); self.status_text.pack(fill="both", expand=True, padx=5, pady=5)
+        right_controls_frame = ttk.Frame(button_controls_frame); right_controls_frame.pack(side=tk.RIGHT, padx=(0,15)); attach_label = ttk.Label(right_controls_frame, text=self.lang["attach_label"]); attach_label.pack(side="left", padx=(0,2)); self.attachment_entry = ttk.Entry(right_controls_frame, textvariable=self.attachment_var, width=25, state="readonly"); self.attachment_entry.pack(side="left", padx=(0,3)); ttk.Button(right_controls_frame, text=self.lang["select_attach"], command=self.select_attachments, style="Secondary.TButton").pack(side="left", padx=(0,2)); ttk.Button(right_controls_frame, text=self.lang["clear_attachments"], command=self.clear_attachments, style="Secondary.TButton").pack(side="left", padx=(0,8)); ttk.Button(right_controls_frame, text=self.lang["signature_button"], command=self.select_signature_image, style="Secondary.TButton").pack(side="left", padx=(3, 2)); ttk.Button(right_controls_frame, text=self.lang["clear_signature_button"], command=self.clear_signature_image, style="Secondary.TButton").pack(side="left", padx=(0,2)); self.signature_label_display = ttk.Label(right_controls_frame, textvariable=self.signature_filename_var, width=15, anchor="w"); self.signature_label_display.pack(side="left", padx=(0,3))
+        status_frame = ttk.LabelFrame(bottom_frame_container, text=self.lang["status_label"], padding="8"); status_frame.grid(row=1, column=0, padx=0, pady=(3,0), sticky="nsew"); status_frame.columnconfigure(0, weight=1); status_frame.rowconfigure(0, weight=1); self.status_text = tk.Text(status_frame, height=6, width=70, state="normal", bg="#e8f4f8", wrap=tk.WORD); self.status_text.pack(fill="both", expand=True, padx=3, pady=3)
         self.update_signature_display()
 
     def scan_and_setup_placeholder_ui(self): # Unchanged
@@ -1219,17 +1237,67 @@ class EmailSenderApp:
                 if self.body_text_area.tag_ranges("sel"): self.body_text_area.tag_add(tag_name, "sel.first", "sel.last")
         except tk.TclError: pass
 
-    def toggle_bold(self): # Unchanged
+    def toggle_bold(self): # Modified for toggle functionality
         try:
-            current_font_obj = font.Font(font=self.body_text_area.cget("font")); new_weight = "bold" if current_font_obj.actual("weight") == "normal" else "normal"
-            self._apply_text_tag("user_bold", font=font.Font(family=current_font_obj.actual("family"), size=current_font_obj.actual("size"), weight=new_weight, slant=current_font_obj.actual("slant")))
-        except tk.TclError: pass
+            if not self.body_text_area.tag_ranges("sel"):
+                return  # 没有选中文本，直接返回
+            
+            # 检查选中文本是否已经有粗体标签
+            start, end = "sel.first", "sel.last"
+            current_tags = self.body_text_area.tag_names(start)
+            
+            # 查找是否存在粗体标签
+            bold_tags = [tag for tag in current_tags if tag.startswith("user_bold")]
+            
+            if bold_tags:
+                # 如果已经有粗体，移除所有粗体标签
+                for tag in bold_tags:
+                    self.body_text_area.tag_remove(tag, start, end)
+            else:
+                # 如果没有粗体，添加粗体
+                current_font_obj = font.Font(font=self.body_text_area.cget("font"))
+                bold_font = font.Font(
+                    family=current_font_obj.actual("family"),
+                    size=current_font_obj.actual("size"),
+                    weight="bold",
+                    slant=current_font_obj.actual("slant")
+                )
+                tag_name = f"user_bold_{int(time.time())}"
+                self.body_text_area.tag_configure(tag_name, font=bold_font)
+                self.body_text_area.tag_add(tag_name, start, end)
+        except tk.TclError: 
+            pass
 
-    def toggle_italic(self): # Unchanged
+    def toggle_italic(self): # Modified for toggle functionality
         try:
-            current_font_obj = font.Font(font=self.body_text_area.cget("font")); new_slant = "italic" if current_font_obj.actual("slant") == "roman" else "roman"
-            self._apply_text_tag("user_italic", font=font.Font(family=current_font_obj.actual("family"), size=current_font_obj.actual("size"), weight=current_font_obj.actual("weight"), slant=new_slant))
-        except tk.TclError: pass
+            if not self.body_text_area.tag_ranges("sel"):
+                return  # 没有选中文本，直接返回
+            
+            # 检查选中文本是否已经有斜体标签
+            start, end = "sel.first", "sel.last"
+            current_tags = self.body_text_area.tag_names(start)
+            
+            # 查找是否存在斜体标签
+            italic_tags = [tag for tag in current_tags if tag.startswith("user_italic")]
+            
+            if italic_tags:
+                # 如果已经有斜体，移除所有斜体标签
+                for tag in italic_tags:
+                    self.body_text_area.tag_remove(tag, start, end)
+            else:
+                # 如果没有斜体，添加斜体
+                current_font_obj = font.Font(font=self.body_text_area.cget("font"))
+                italic_font = font.Font(
+                    family=current_font_obj.actual("family"),
+                    size=current_font_obj.actual("size"),
+                    weight=current_font_obj.actual("weight"),
+                    slant="italic"
+                )
+                tag_name = f"user_italic_{int(time.time())}"
+                self.body_text_area.tag_configure(tag_name, font=italic_font)
+                self.body_text_area.tag_add(tag_name, start, end)
+        except tk.TclError: 
+            pass
 
     def apply_font_and_size_change(self, event=None): # Unchanged
         if not (hasattr(self, 'body_text_area') and self.body_text_area.winfo_exists()): return
@@ -1247,8 +1315,16 @@ class EmailSenderApp:
         result = colorchooser.askcolor(title=self.lang.get("bg_color_label"))
         if result and result[1]: color_code = result[1]; self._apply_text_tag(f"bg_{color_code.replace('#','')}_{int(time.time())}", background=color_code)
 
-    def select_excel_file(self): # Unchanged
-        file_path = filedialog.askopenfilename(title=self.lang.get("select_excel_prompt", "Select Excel"), filetypes=[("Excel files", "*.xlsx;*.xls")])
+    def select_excel_file(self): # Fixed for macOS compatibility
+        file_path = filedialog.askopenfilename(
+            title=self.lang.get("select_excel_prompt", "Select Excel File"), 
+            filetypes=[
+                ("Excel files", "*.xlsx *.xls"),
+                ("Excel 2007-365", "*.xlsx"),
+                ("Excel 97-2003", "*.xls"),
+                ("All files", "*.*")
+            ]
+        )
         if file_path: self.excel_file_var.set(file_path); self.loaded_excel_data_preview = load_contacts(file_path, self, self.lang)
 
     def change_language(self, event=None): # Partially MODIFIED to update new preview_body_label_widget
@@ -1273,6 +1349,11 @@ class EmailSenderApp:
             except:
                 # 如果获取状态失败，保持按钮可用
                 self.activate_button.config(text=self.lang["permanent_activate_button"], state=tk.NORMAL)
+        
+        # 更新Save按钮文本
+        if hasattr(self, 'save_button') and self.save_button.winfo_exists():
+            save_text = "Save" if self.lang_code == "en" else "保存"
+            self.save_button.config(text=save_text)
 
         for widget in self.root.winfo_children(): self._update_widget_language(widget)
         if hasattr(self, 'success_counter_label_widget') and self.success_counter_label_widget.winfo_exists(): self.success_counter_label_widget.config(text=f"{self.lang['success_count_label']} {self.current_success_sends_count}")
