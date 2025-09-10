@@ -936,7 +936,7 @@ class EmailSenderApp:
         
         # 创建其他UI元素
         main_paned_window = ttk.PanedWindow(self.root, orient=tk.VERTICAL); main_paned_window.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
-        top_frame_container = ttk.Frame(main_paned_window); main_paned_window.add(top_frame_container, weight=1); top_frame_container.columnconfigure(0, weight=1); top_frame_container.columnconfigure(1, weight=0); top_frame_container.columnconfigure(2, weight=1); top_frame_container.rowconfigure(0, weight=1)
+        top_frame_container = ttk.Frame(main_paned_window); main_paned_window.add(top_frame_container, weight=4); top_frame_container.columnconfigure(0, weight=1); top_frame_container.columnconfigure(1, weight=0); top_frame_container.columnconfigure(2, weight=1); top_frame_container.rowconfigure(0, weight=1)
         self.input_frame = ttk.LabelFrame(top_frame_container, text=self.lang["input_label"], padding="4 6"); self.input_frame.grid(row=0, column=0, padx=(0,3), pady=3, sticky="nsew"); self.input_frame.columnconfigure(1, weight=1)
         ttk.Label(self.input_frame, text=self.lang["sender_label"]).grid(row=0, column=0, padx=2, pady=0, sticky="w"); ttk.Entry(self.input_frame, textvariable=self.sender_var, width=30).grid(row=0, column=1, padx=2, pady=0, sticky="ew")
         ttk.Label(self.input_frame, text=self.lang["password_label"]).grid(row=1, column=0, padx=2, pady=0, sticky="w"); ttk.Entry(self.input_frame, textvariable=self.password_var, show="*", width=30).grid(row=1, column=1, padx=2, pady=0, sticky="ew")
