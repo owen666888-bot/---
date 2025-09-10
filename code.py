@@ -38,9 +38,15 @@ from license_manager import (
     PRODUCT_KEY_PREFIX,
 )
 
-# Configure logging (不变)
+# Configure logging (修改为使用用户目录)
+import os
+log_dir = os.path.expanduser("~/Documents")
+if not os.path.exists(log_dir):
+    log_dir = os.path.expanduser("~")
+log_file = os.path.join(log_dir, "email_sending.log")
+
 logging.basicConfig(
-    filename="email_sending.log",
+    filename=log_file,
     level=logging.INFO,
     format="%(asctime)s - %(levelname)s - %(message)s"
 )
