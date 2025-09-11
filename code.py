@@ -488,7 +488,11 @@ class EmailSenderApp:
         self.font_size_var = tk.StringVar(value="14"); self.font_var = tk.StringVar(value="Arial")
         self.current_success_sends_count = 0; self.signature_image_path = None; self.signature_image_cid = "GlobalSignatureCID01"; self.signature_filename_var = tk.StringVar()
         self.fonts = ["Arial", "Helvetica", "Times New Roman", "Courier New", "Verdana", "宋体", "黑体", "楷体", "微软雅黑", "仿宋"]
-        self.config_file = "config.json"; self.sending_thread = None; self.pause_event = threading.Event(); self.pause_event.set(); self.pause_resume_button = None
+        # 配置文件保存到用户可写目录
+        config_dir = os.path.expanduser("~/Documents")
+        if not os.path.exists(config_dir):
+            config_dir = os.path.expanduser("~")
+        self.config_file = os.path.join(config_dir, "MailRoutePro_config.json"); self.sending_thread = None; self.pause_event = threading.Event(); self.pause_event.set(); self.pause_resume_button = None
         
         # 添加帮助网址
         self.help_url = "https://help.getzentools.com/"
