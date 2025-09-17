@@ -68,7 +68,7 @@ LANGUAGES = {
         "max_delay_label": "最大间隔(秒):", # 添加最大间隔
         "invalid_delay_range": "发送间隔设置错误：最小间隔不能大于最大间隔。", # 添加间隔范围错误提示
         "batch_size_label": "每批数量:",
-        "batch_interval_label": "每组间隔(分钟):", "excel_label": "选择 Excel 文件:", "body_label": "邮件正文 (HTML - 可用 {占位符}):",
+        "batch_interval_label": "每组间隔(分钟):", "excel_label": "选择 Excel 文件:", "body_label": "邮件正文 (可用 {占位符}):",
         "select_excel": "浏览", "language_label": "语言:", "start_button": "开始发送", "bold": "加粗", "italic": "斜体",
         "font_size": "字体大小:", "font_label": "字体:", "color_label": "文字颜色:", "bg_color_label": "背景颜色:",
         "attach_label": "上传附件:", "select_attach": "添加附件", "success_count_label": "发送成功数量:",
@@ -121,7 +121,7 @@ LANGUAGES = {
         "max_delay_label": "Max Delay (s):", # 添加最大间隔
         "invalid_delay_range": "Send delay setting error: Min delay cannot be greater than max delay.", # 添加间隔范围错误提示
         "batch_size_label": "Batch Size:",
-        "batch_interval_label": "Batch Interval (minutes):", "excel_label": "Select Excel File:", "body_label": "Email Body (HTML - use {Placeholders}):",
+        "batch_interval_label": "Batch Interval (minutes):", "excel_label": "Select Excel File:", "body_label": "Email Body (use {Placeholders}):",
         "select_excel": "Browse", "language_label": "Language:", "start_button": "Start Sending", "bold": "Bold", "italic": "Italic",
         "font_size": "Font Size:", "font_label": "Font:", "color_label": "Text Color:", "bg_color_label": "Background Color:",
         "attach_label": "Upload Attachments:", "select_attach": "Add Attachments", "success_count_label": "Successful Sends:",
@@ -178,7 +178,7 @@ LANGUAGES = {
         "max_delay_label": "Max Delay (s):", # 添加最大间隔
         "invalid_delay_range": "Send delay setting error: Min delay cannot be greater than max delay.", # 添加间隔范围错误提示
         "batch_size_label": "Batch Size:",
-        "batch_interval_label": "Batch Interval (minutes):", "excel_label": "Select Excel File:", "body_label": "Email Body (HTML - use {Placeholders}):",
+        "batch_interval_label": "Batch Interval (minutes):", "excel_label": "Select Excel File:", "body_label": "Email Body (use {Placeholders}):",
         "select_excel": "Browse", "language_label": "Language:", "start_button": "Start Sending", "bold": "Bold", "italic": "Italic",
         "font_size": "Font Size:", "font_label": "Font:", "color_label": "Text Color:", "bg_color_label": "Background Color:",
         "attach_label": "Upload Attachments:", "select_attach": "Add Attachments", "success_count_label": "Successful Sends:",
@@ -987,7 +987,7 @@ class EmailSenderApp:
         
         body_frame = ttk.LabelFrame(top_frame_container, text=self.lang["body_label"], padding="8 10"); body_frame.grid(row=0, column=2, padx=(3,0), pady=3, sticky="nsew"); body_frame.columnconfigure(0, weight=1); body_frame.rowconfigure(1, weight=1)
         toolbar_frame = ttk.Frame(body_frame); toolbar_frame.grid(row=0, column=0, columnspan=2, sticky="ew", pady=(0,5))
-        ttk.Button(toolbar_frame, text=self.lang["bold"], command=self.toggle_bold, style="Secondary.TButton").pack(side="left", padx=2); ttk.Button(toolbar_frame, text=self.lang["italic"], command=self.toggle_italic, style="Secondary.TButton").pack(side="left", padx=2); ttk.Label(toolbar_frame, text=self.lang["font_size"]).pack(side="left", padx=(10,2)); ttk.Entry(toolbar_frame, textvariable=self.font_size_var, width=4).pack(side="left", padx=2); ttk.Label(toolbar_frame, text=self.lang["font_label"]).pack(side="left", padx=(10,2)); font_combo = ttk.Combobox(toolbar_frame, textvariable=self.font_var, values=self.fonts, state="readonly", width=12); font_combo.pack(side="left", padx=2); font_combo.bind("<<ComboboxSelected>>", self.apply_font_and_size_change); ttk.Button(toolbar_frame, text=self.lang["apply_font_button"], command=self.apply_font_and_size_change, style="Secondary.TButton").pack(side="left", padx=2); ttk.Button(toolbar_frame, text=self.lang["color_label"], command=self.choose_color, style="Secondary.TButton").pack(side="left", padx=2); ttk.Button(toolbar_frame, text=self.lang["bg_color_label"], command=self.choose_bg_color, style="Secondary.TButton").pack(side="left", padx=2)
+        ttk.Label(toolbar_frame, text=self.lang["font_size"]).pack(side="left", padx=(10,2)); ttk.Entry(toolbar_frame, textvariable=self.font_size_var, width=4).pack(side="left", padx=2); ttk.Label(toolbar_frame, text=self.lang["font_label"]).pack(side="left", padx=(10,2)); font_combo = ttk.Combobox(toolbar_frame, textvariable=self.font_var, values=self.fonts, state="readonly", width=12); font_combo.pack(side="left", padx=2); font_combo.bind("<<ComboboxSelected>>", self.apply_font_and_size_change); ttk.Button(toolbar_frame, text=self.lang["apply_font_button"], command=self.apply_font_and_size_change, style="Secondary.TButton").pack(side="left", padx=2)
         self.body_text_area = tk.Text(body_frame, height=10, width=40, font=(self.font_var.get(), int(self.font_size_var.get() or 14)), undo=True, wrap=tk.WORD); self.body_text_area.grid(row=1, column=0, sticky="nsew", padx=(0,0), pady=(0,0)); self.body_text_area.bind("<<Paste>>", self.handle_paste); v_scrollbar = ttk.Scrollbar(body_frame, orient=tk.VERTICAL, command=self.body_text_area.yview); v_scrollbar.grid(row=1, column=1, sticky="ns"); self.body_text_area.config(yscrollcommand=v_scrollbar.set)
         
         middle_frame_container = ttk.Frame(main_paned_window); main_paned_window.add(middle_frame_container, weight=3); middle_frame_container.columnconfigure(0, weight=1); middle_frame_container.columnconfigure(1, weight=1); middle_frame_container.rowconfigure(0, weight=1)
