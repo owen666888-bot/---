@@ -528,6 +528,9 @@ class EmailSenderApp:
             self.root.update_idletasks()
             print("[APP_INIT] Forced root window update_idletasks after license check.")
         print("[APP_INIT] EmailSenderApp initialization complete.")
+        
+        # Stabilize layout after all widgets are created and shown
+        self.root.after(100, self.reset_and_stabilize_layout)
 
     def _set_default_config_values(self, initializing=False): # 更新默认配置值
         print("[CONFIG_HELPER] Setting default config values...")
@@ -943,8 +946,8 @@ class EmailSenderApp:
                       foreground=text_color_dark)
         
         # 创建其他UI元素
-        main_paned_window = ttk.PanedWindow(self.root, orient=tk.VERTICAL); main_paned_window.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
-        top_frame_container = ttk.Frame(main_paned_window); main_paned_window.add(top_frame_container, weight=0); top_frame_container.columnconfigure(0, weight=1); top_frame_container.columnconfigure(1, weight=0); top_frame_container.columnconfigure(2, weight=1); top_frame_container.rowconfigure(0, weight=1)
+        self.main_paned_window = ttk.PanedWindow(self.root, orient=tk.VERTICAL); self.main_paned_window.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        top_frame_container = ttk.Frame(self.main_paned_window); self.main_paned_window.add(top_frame_container, weight=0); top_frame_container.columnconfigure(0, weight=1); top_frame_container.columnconfigure(1, weight=0); top_frame_container.columnconfigure(2, weight=1); top_frame_container.rowconfigure(0, weight=1)
         self.input_frame = ttk.LabelFrame(top_frame_container, text=self.lang["input_label"], padding="4 6"); self.input_frame.grid(row=0, column=0, padx=(0,3), pady=3, sticky="nsew"); self.input_frame.columnconfigure(1, weight=1)
         ttk.Label(self.input_frame, text=self.lang["sender_label"]).grid(row=0, column=0, padx=2, pady=0, sticky="w"); ttk.Entry(self.input_frame, textvariable=self.sender_var, width=30).grid(row=0, column=1, padx=2, pady=0, sticky="ew")
         ttk.Label(self.input_frame, text=self.lang["password_label"]).grid(row=1, column=0, padx=2, pady=0, sticky="w"); ttk.Entry(self.input_frame, textvariable=self.password_var, show="*", width=30).grid(row=1, column=1, padx=2, pady=0, sticky="ew")
@@ -994,7 +997,7 @@ class EmailSenderApp:
         ttk.Label(toolbar_frame, text=self.lang["font_size"]).pack(side="left", padx=(10,2)); ttk.Entry(toolbar_frame, textvariable=self.font_size_var, width=4).pack(side="left", padx=2); ttk.Label(toolbar_frame, text=self.lang["font_label"]).pack(side="left", padx=(10,2)); font_combo = ttk.Combobox(toolbar_frame, textvariable=self.font_var, values=self.fonts, state="readonly", width=12); font_combo.pack(side="left", padx=2); font_combo.bind("<<ComboboxSelected>>", self.apply_font_and_size_change); ttk.Button(toolbar_frame, text=self.lang["apply_font_button"], command=self.apply_font_and_size_change, style="Secondary.TButton").pack(side="left", padx=2)
         self.body_text_area = tk.Text(body_frame, height=10, width=40, font=(self.font_var.get(), int(self.font_size_var.get() or 14)), undo=True, wrap=tk.WORD); self.body_text_area.grid(row=1, column=0, sticky="nsew", padx=(0,0), pady=(0,0)); self.body_text_area.bind("<<Paste>>", self.handle_paste); v_scrollbar = ttk.Scrollbar(body_frame, orient=tk.VERTICAL, command=self.body_text_area.yview); v_scrollbar.grid(row=1, column=1, sticky="ns"); self.body_text_area.config(yscrollcommand=v_scrollbar.set)
         
-        middle_frame_container = ttk.Frame(main_paned_window); main_paned_window.add(middle_frame_container, weight=3); middle_frame_container.columnconfigure(0, weight=1); middle_frame_container.columnconfigure(1, weight=1); middle_frame_container.rowconfigure(0, weight=1)
+        middle_frame_container = ttk.Frame(self.main_paned_window); self.main_paned_window.add(middle_frame_container, weight=3); middle_frame_container.columnconfigure(0, weight=1); middle_frame_container.columnconfigure(1, weight=1); middle_frame_container.rowconfigure(0, weight=1)
         self.placeholder_mapping_frame = ttk.LabelFrame(middle_frame_container, text=self.lang["personalization_engine_label"], padding="8"); self.placeholder_mapping_frame.grid(row=0, column=0, padx=(0,3), pady=3, sticky="nsew"); self.placeholder_mapping_frame.columnconfigure(0, weight=1); self.placeholder_mapping_frame.rowconfigure(1, weight=1)
         scan_button = ttk.Button(self.placeholder_mapping_frame, text=self.lang["scan_placeholders_button"], command=self.scan_and_setup_placeholder_ui, style="Secondary.TButton"); scan_button.grid(row=0, column=0, pady=(0,5), sticky="ew"); self.placeholder_scan_instruction_label = ttk.Label(self.placeholder_mapping_frame, text=self.lang["placeholder_scan_instruction"], wraplength=300, justify=tk.LEFT); self.placeholder_scan_instruction_label.grid(row=2, column=0, pady=(5,0), sticky="ew"); self.placeholder_scrollable_frame = ScrollableFrame(self.placeholder_mapping_frame); self.placeholder_scrollable_frame.grid(row=1, column=0, sticky="nsew", pady=5)
         self.preview_frame = ttk.LabelFrame(middle_frame_container, text=self.lang["preview_engine_label"], padding="8"); self.preview_frame.grid(row=0, column=1, padx=(3,0), pady=3, sticky="nsew"); self.preview_frame.columnconfigure(0, weight=1); self.preview_frame.rowconfigure(1, weight=0); self.preview_frame.rowconfigure(2, weight=0); self.preview_frame.rowconfigure(3, weight=0); self.preview_frame.rowconfigure(4, weight=3)
@@ -1003,7 +1006,7 @@ class EmailSenderApp:
         self.preview_body_label_widget = ttk.Label(self.preview_frame, text=self.lang["preview_body_label"]) # Store for easy update
         self.preview_body_label_widget.grid(row=3, column=0, sticky="w", pady=(5,2));
         self.preview_body_text = tk.Text(self.preview_frame, height=8, width=40, state="disabled", wrap=tk.WORD, bg="#e9e9e9"); self.preview_body_text.grid(row=4, column=0, sticky="nsew")
-        bottom_frame_container = ttk.Frame(main_paned_window, height=200); main_paned_window.add(bottom_frame_container, weight=1); bottom_frame_container.columnconfigure(0, weight=1); bottom_frame_container.rowconfigure(0, weight=0); bottom_frame_container.rowconfigure(1, weight=1)
+        bottom_frame_container = ttk.Frame(self.main_paned_window, height=200); self.main_paned_window.add(bottom_frame_container, weight=1); bottom_frame_container.columnconfigure(0, weight=1); bottom_frame_container.rowconfigure(0, weight=0); bottom_frame_container.rowconfigure(1, weight=1)
         button_controls_frame = ttk.Frame(bottom_frame_container); button_controls_frame.grid(row=0, column=0, pady=(5,3), sticky="ew")
         center_buttons_frame = ttk.Frame(button_controls_frame); center_buttons_frame.pack(side=tk.LEFT, padx=(15,0)); 
         self.start_button = ttk.Button(center_buttons_frame, text=self.lang["start_button"], command=self.start_sending); 
@@ -1274,6 +1277,40 @@ class EmailSenderApp:
         
         return text
 
+    def reset_and_stabilize_layout(self):
+        """
+        Forces the PanedWindow sashes to a stable, predefined position
+        to prevent UI layout instability after widgets are created and shown.
+        """
+        # Ensure the window and paned window exist before proceeding
+        if not (hasattr(self, 'root') and self.root.winfo_exists() and
+                hasattr(self, 'main_paned_window') and self.main_paned_window.winfo_exists()):
+            return
+
+        # Force the UI to update and calculate its dimensions
+        self.root.update_idletasks()
+
+        try:
+            # We have 3 panes, so there are 2 sashes (dividers) at index 0 and 1.
+            # Set the position of the first sash (between top and middle panes).
+            # We'll place it at 330 pixels from the top.
+            self.main_paned_window.sashpos(0, 330)
+
+            # Set the position of the second sash (between middle and bottom panes).
+            # We'll get the total height and place it 170 pixels from the bottom.
+            window_height = self.main_paned_window.winfo_height()
+            self.main_paned_window.sashpos(1, window_height - 170)
+
+            print(f"[UI_STABILIZER] Layout stabilized. Sash 0 at 330, Sash 1 at {window_height - 170}.")
+
+        except tk.TclError as e:
+            # This can happen if the window is not yet fully visible.
+            # We can schedule it to run again shortly.
+            print(f"[UI_STABILIZER] TclError during sash positioning: {e}. Retrying in 100ms.")
+            self.root.after(100, self.reset_and_stabilize_layout)
+        except Exception as e:
+            print(f"[UI_STABILIZER] Unexpected error during sash positioning: {e}")
+
     def _apply_text_tag(self, tag_name, **kwargs): # Unchanged
         try:
             if self.body_text_area.winfo_exists():
@@ -1420,6 +1457,9 @@ class EmailSenderApp:
 
             
         self.update_preview(); print("[LANG_CHANGE] Widget update complete.")
+        
+        # Stabilize layout after language change
+        self.root.after(100, self.reset_and_stabilize_layout)
 
     def _update_specific_preview_labels(self, widget): # Unchanged (but self.preview_body_label_widget is handled separately now)
         if isinstance(widget, ttk.Frame):
