@@ -1200,38 +1200,39 @@ class EmailSenderApp:
     # --- MODIFIED: get_html_from_text_widget ---
     def get_html_from_text_widget(self):
         if not (hasattr(self, 'body_text_area') and self.body_text_area.winfo_exists()):
-            return "<p>&nbsp;</p>" # Should ideally not happen if UI is built
-
-        raw_text_content = self.body_text_area.get("1.0", tk.END)
-        # Remove the single trailing newline that tk.Text widget often auto-adds
-        if raw_text_content.endswith('\n'):
-            raw_text_content = raw_text_content[:-1]
-
-        if not raw_text_content.strip(): # If content is empty or just whitespace after cleanup
             return "<p>&nbsp;</p>"
 
-        lines = raw_text_content.split('\n')
-        html_output_parts = []
-        current_paragraph_lines = []
-
-        for line_text in lines:
-            if not line_text.strip():  # Current line is blank (or only whitespace)
-                if current_paragraph_lines:  # Finish the paragraph being built
-                    escaped_para_lines = [html.escape(l) for l in current_paragraph_lines]
-                    html_output_parts.append(f"<p>{'<br>\n'.join(escaped_para_lines)}</p>")
-                    current_paragraph_lines = []
-                # Add a representation for the blank line itself
-                html_output_parts.append("<p>&nbsp;</p>") # Represent visual blank line as an empty p
-            else:
-                current_paragraph_lines.append(line_text)
+        # 1. Get the raw text from the widget
+        raw_text_content = self.body_text_area.get("1.0", tk.END)
         
-        # After loop, if there are any remaining lines for the last paragraph
-        if current_paragraph_lines:
-            escaped_para_lines = [html.escape(l) for l in current_paragraph_lines]
-            html_output_parts.append(f"<p>{'<br>\n'.join(escaped_para_lines)}</p>")
-            
-        final_html = "\n".join(html_output_parts)
-        return final_html if final_html else "<p>&nbsp;</p>" # Ensure something is returned
+        # 2. Basic cleanup
+        # Remove the single trailing newline tk.Text auto-adds
+        if raw_text_content.endswith('\n'):
+            raw_text_content = raw_text_content[:-1]
+        
+        # Return a non-breaking space if the content is empty or just whitespace
+        if not raw_text_content.strip():
+            return "<p>&nbsp;</p>"
+
+        # 3. Escape special HTML characters to prevent code injection
+        escaped_text = html.escape(raw_text_content)
+
+        # 4. Smart paragraph and line break conversion (WYSIWYG logic)
+        # First, split the entire text into paragraphs based on two or more newlines
+        paragraphs = re.split(r'\n{2,}', escaped_text)
+        
+        html_parts = []
+        for para in paragraphs:
+            if para.strip(): # Ensure we don't create empty paragraphs
+                # Within each paragraph, replace single newlines with <br> tags
+                lines_with_br = para.replace('\n', '<br>\n')
+                # Wrap the entire processed paragraph in <p> tags
+                html_parts.append(f'<p>{lines_with_br}</p>')
+
+        # 5. Join all HTML parts into the final body
+        final_html = "\n".join(html_parts)
+        
+        return final_html if final_html else "<p>&nbsp;</p>"
     # --- END MODIFIED: get_html_from_text_widget ---
 
     def _apply_text_tag(self, tag_name, **kwargs): # Unchanged
