@@ -364,6 +364,10 @@ def send_emails_to_contacts(*args, **kwargs):
             # IMPORTANT: For actual email sending, personalization happens on the HTML structure
             current_body_raw_html_for_email_build = current_body_raw_html_for_email_build.replace(placeholder_tag, html.escape(value_to_insert))  # Ensure values inserted into HTML are escaped
 
+        # Apply Spintax rotation to make each email unique
+        current_subject = app_instance.parse_spintax(current_subject)
+        current_body_raw_html_for_email_build = app_instance.parse_spintax(current_body_raw_html_for_email_build)
+
         # 添加签名
         signature_html_tag = f'<p><img src="cid:{app_instance.signature_image_cid}"></p>' if app_instance.signature_image_path and os.path.exists(app_instance.signature_image_path) else ""
         combined_body_html_with_sig_placeholder = current_body_raw_html_for_email_build + signature_html_tag
@@ -1152,8 +1156,12 @@ class EmailSenderApp:
 
         final_preview_body_text = preview_body_personalized_text + signature_text_placeholder
 
-        self.preview_subject_text.insert("1.0", preview_subject_personalized)
-        self.preview_body_text.insert("1.0", final_preview_body_text)
+        # Apply Spintax on top of personalized content for preview
+        spun_preview_subject = self.parse_spintax(preview_subject_personalized)
+        spun_preview_body = self.parse_spintax(final_preview_body_text)
+
+        self.preview_subject_text.insert("1.0", spun_preview_subject)
+        self.preview_body_text.insert("1.0", spun_preview_body)
 
         self.preview_subject_text.config(state="disabled")
         self.preview_body_text.config(state="disabled")
@@ -1234,6 +1242,37 @@ class EmailSenderApp:
         
         return final_html if final_html else "<p>&nbsp;</p>"
     # --- END MODIFIED: get_html_from_text_widget ---
+
+    def parse_spintax(self, text):
+        """
+        Parse Spintax syntax to generate dynamic content variations.
+        Supports nested {option1|option2|option3} syntax.
+        """
+        if not text or not isinstance(text, str):
+            return text
+        
+        # Keep processing until no more Spintax blocks are found
+        while True:
+            # Find the innermost Spintax block
+            match = re.search(r'\{([^{}]*?)\}', text)
+            if not match:
+                break
+            
+            # Extract the content within braces
+            options_text = match.group(1)
+            # Split by pipe character to get options list
+            options = [option.strip() for option in options_text.split('|') if option.strip()]
+            
+            if options:
+                # Choose a random option
+                chosen_option = random.choice(options)
+                # Replace the entire Spintax block with the chosen option
+                text = text.replace(match.group(0), chosen_option, 1)
+            else:
+                # If no valid options, remove the empty block
+                text = text.replace(match.group(0), '', 1)
+        
+        return text
 
     def _apply_text_tag(self, tag_name, **kwargs): # Unchanged
         try:
